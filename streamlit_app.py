@@ -47,7 +47,7 @@ except:
     st.stop()
 
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash') # Usamos Flash para rapidez en chat
+model = genai.GenerativeModel('gemini-2.0-flash') # Usamos Flash para rapidez en chat
 
 # Inicializar Estado
 if "mensajes" not in st.session_state: st.session_state.mensajes = []
