@@ -232,8 +232,23 @@ with st.sidebar:
     st.markdown("---")
     st.caption(f"ID Sesión: {st.session_state.usuario_data['clave']}")
     
-    if st.button("💾 Guardar y Salir"):
+st.markdown("---")
+    st.caption(f"ID Sesión: {st.session_state.usuario_data['clave']}")
+    
+    # --- BOTÓN DE DESCARGA PDF ---
+    if st.session_state.mensajes:
+        pdf_bytes = crear_pdf(st.session_state.mensajes, st.session_state.usuario_data['clave'])
+        st.download_button(
+            label="📄 Descargar Bitácora (PDF)",
+            data=pdf_bytes,
+            file_name=f"Reporte_Quantum_{datetime.now().strftime('%H%M')}.pdf",
+            mime="application/pdf"
+        )
+
+    # --- BOTÓN SALIR ---
+    if st.button("🚪 Cerrar Sesión"):
         st.session_state.usuario_data = None
+        st.session_state.mensajes = []
         st.rerun()
 
 # --- ÁREA PRINCIPAL ---
