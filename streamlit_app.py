@@ -5,6 +5,39 @@ import utils_voz as voz # Módulo de voz modular
 import time
 from datetime import datetime
 
+from fpdf import FPDF
+
+def crear_pdf(historial, usuario):
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('Arial', 'B', 15)
+            self.cell(0, 10, 'Quantum Catalyst - Reporte de I+D', 0, 1, 'C')
+            self.set_font('Arial', 'I', 10)
+            self.cell(0, 10, f'Investigador: {usuario} | Fecha: {datetime.now().strftime("%Y-%m-%d")}', 0, 1, 'C')
+            self.ln(10)
+
+    pdf = PDF()
+    pdf.add_page()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    
+    for msg in historial:
+        rol = "IA (Quantum Catalyst)" if msg["role"] == "assistant" else "INVESTIGADOR"
+        color = (0, 0, 128) if msg["role"] == "assistant" else (0, 100, 0) # Azul vs Verde
+        
+        pdf.set_text_color(*color)
+        pdf.set_font("Arial", "B", 11)
+        pdf.cell(0, 10, txt=rol, ln=True)
+        
+        pdf.set_text_color(0, 0, 0)
+        pdf.set_font("Arial", size=10)
+        
+        # Limpieza básica de texto para evitar errores de codificación en FPDF
+        contenido = msg["content"].encode('latin-1', 'replace').decode('latin-1')
+        pdf.multi_cell(0, 7, txt=contenido)
+        pdf.ln(5)
+        
+    return pdf.output(dest='S').encode('latin-1')
+
 # ==========================================
 # ⚙️ 1. CONFIGURACIÓN Y ESTILOS (LABORATORIO CIENTÍFICO)
 # ==========================================
