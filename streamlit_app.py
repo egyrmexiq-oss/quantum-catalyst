@@ -41,7 +41,7 @@ try:
     API_KEY = st.secrets.get("GOOGLE_API_KEY")
     # URL de tu Hoja de Cálculo (Publicada como CSV)
     # ¡OJO! Reemplaza esto con TU LINK real de la hoja nueva
-    URL_SHEET_CATALYST = st.secrets.get("https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv", "TU_URL_AQUI_SI_FALLA_SECRETS")
+    URL_SHEET_CATALYST = st.secrets.get("URL_SHEET_CATALYST")
 except:
     st.error("⚠️ Error en Secrets.")
     st.stop()
