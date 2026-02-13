@@ -58,13 +58,22 @@ if "modo_investigacion" not in st.session_state: st.session_state.modo_investiga
 # ==========================================
 # 📊 2. GESTIÓN DE DATOS (GOOGLE SHEETS)
 # ==========================================
+# Así debe quedar tu función COMPLETA (Reemplaza desde la línea 62 hasta el return)
+
 @st.cache_data(ttl=60)
 def cargar_usuarios():
     try:
-        # Leemos el CSV
-        df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv")
+        # LÍNEA 65: Usamos la variable (Más limpio)
+        df = pd.read_csv(URL_SHEET_CATALYST)
+        
         # Normalizamos nombres de columnas
         df.columns = [c.strip().lower() for c in df.columns]
+        
+        # 👇 ESTO ES LO QUE TE FALTA EN TU IMAGEN 👇
+        # Limpieza de espacios invisibles en las claves
+        if 'clave' in df.columns:
+            df['clave'] = df['clave'].astype(str).str.strip()
+            
         return df
     except Exception as e:
         return None
