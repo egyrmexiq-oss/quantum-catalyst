@@ -65,33 +65,25 @@ if "modo_investigacion" not in st.session_state: st.session_state.modo_investiga
 # ==========================================
 # 🕵️‍♂️ FUNCIÓN DE DIAGNÓSTICO (MODO RAYOS X)
 # ==========================================
-@st.cache_data(ttl=0) # ttl=0 obliga a descargar siempre (sin caché)
+# ==========================================
+# 📊 2. GESTIÓN DE DATOS (PRODUCCIÓN)
+# ==========================================
+@st.cache_data(ttl=60)
 def cargar_usuarios():
-    # 1. Avisar que estamos trabajando
-    st.info("📡 Conectando con Google Sheets...")
-    
-    # TU URL DIRECTA (Copiada de tus imágenes)
-    url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv"
-    
-    # 2. Intentar leer SIN 'try-except' para ver el error real si falla
-    df = pd.read_csv(url)
-    
-    # 3. ¡ÉXITO! Mostrar lo que bajamos
-    st.success("✅ ¡Archivo descargado!")
-    with st.expander("👀 VER DATOS CRUDOS (Lo que ve el sistema)"):
-        st.write("Columnas detectadas:", df.columns.tolist())
-        st.dataframe(df) # Mostramos la tabla visualmente
-
-    # 4. Limpieza
-    df.columns = [c.strip().lower() for c in df.columns]
-    
-    if 'clave' in df.columns:
-        # Esto quita los espacios invisibles
-        df['clave'] = df['clave'].astype(str).str.strip()
-    else:
-        st.error("❌ ERROR CRÍTICO: No encuentro la columna 'clave' en el Excel.")
-    
-    return df
+    try:
+        # Opción A: Usando la URL desde Secrets (Más seguro)
+        df = pd.read_csv(URL_SHEET_CATALYST)
+        
+        # Normalizamos nombres de columnas
+        df.columns = [c.strip().lower() for c in df.columns]
+        
+        # Limpieza de espacios invisibles (CRÍTICO)
+        if 'clave' in df.columns:
+            df['clave'] = df['clave'].astype(str).str.strip()
+            
+        return df
+    except Exception:
+        return None
         
 def registrar_interaccion(usuario):
     """
