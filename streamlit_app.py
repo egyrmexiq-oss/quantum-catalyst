@@ -62,7 +62,7 @@ if "modo_investigacion" not in st.session_state: st.session_state.modo_investiga
 def cargar_usuarios():
     try:
         # Leemos el CSV
-        df = pd.read_csv(URL_SHEET_CATALYST)
+        df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv")
         # Normalizamos nombres de columnas
         df.columns = [c.strip().lower() for c in df.columns]
         return df
