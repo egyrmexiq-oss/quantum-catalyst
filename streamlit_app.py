@@ -62,21 +62,36 @@ if "modo_investigacion" not in st.session_state: st.session_state.modo_investiga
 
 # Así debe quedar tu función COMPLETA (Reemplaza desde la línea 62 hasta el return)
 
-@st.cache_data(ttl=60)
+# ==========================================
+# 🕵️‍♂️ FUNCIÓN DE DIAGNÓSTICO (MODO RAYOS X)
+# ==========================================
+@st.cache_data(ttl=0) # ttl=0 obliga a descargar siempre (sin caché)
 def cargar_usuarios():
-    try:
-        # LÍNEA 65: Link directo
-        df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv")
-        
-        # Normalizamos columnas
-        df.columns = [c.strip().lower() for c in df.columns]
-        
-        # 👇 AGREGA ESTO SI O SI 👇
-        if 'clave' in df.columns:
-            df['clave'] = df['clave'].astype(str).str.strip()
-            
-        return df
-    except: return None
+    # 1. Avisar que estamos trabajando
+    st.info("📡 Conectando con Google Sheets...")
+    
+    # TU URL DIRECTA (Copiada de tus imágenes)
+    url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv"
+    
+    # 2. Intentar leer SIN 'try-except' para ver el error real si falla
+    df = pd.read_csv(url)
+    
+    # 3. ¡ÉXITO! Mostrar lo que bajamos
+    st.success("✅ ¡Archivo descargado!")
+    with st.expander("👀 VER DATOS CRUDOS (Lo que ve el sistema)"):
+        st.write("Columnas detectadas:", df.columns.tolist())
+        st.dataframe(df) # Mostramos la tabla visualmente
+
+    # 4. Limpieza
+    df.columns = [c.strip().lower() for c in df.columns]
+    
+    if 'clave' in df.columns:
+        # Esto quita los espacios invisibles
+        df['clave'] = df['clave'].astype(str).str.strip()
+    else:
+        st.error("❌ ERROR CRÍTICO: No encuentro la columna 'clave' en el Excel.")
+    
+    return df
         
 def registrar_interaccion(usuario):
     """
