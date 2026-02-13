@@ -65,20 +65,18 @@ if "modo_investigacion" not in st.session_state: st.session_state.modo_investiga
 @st.cache_data(ttl=60)
 def cargar_usuarios():
     try:
-        # LÍNEA 65: Usamos la variable (Más limpio)
-        df = pd.read_csv(URL_SHEET_CATALYST)
+        # LÍNEA 65: Link directo
+        df = pd.read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vT5_960w4F9yZQKCmcJdRGRMUGNaId49tetOFqSJDRfcqfMQc2Y1N_yAvd7zzRRWc5Wy-zvwp4QKE3R/pub?output=csv")
         
-        # Normalizamos nombres de columnas
+        # Normalizamos columnas
         df.columns = [c.strip().lower() for c in df.columns]
         
-        # 👇 ESTO ES LO QUE TE FALTA EN TU IMAGEN 👇
-        # Limpieza de espacios invisibles en las claves
+        # 👇 AGREGA ESTO SI O SI 👇
         if 'clave' in df.columns:
             df['clave'] = df['clave'].astype(str).str.strip()
             
         return df
-    except Exception as e:
-        return None
+    except: return None
         
 def registrar_interaccion(usuario):
     """
