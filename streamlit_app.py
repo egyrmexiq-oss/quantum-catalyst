@@ -1,6 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 import pandas as pd
+import utils_voz as voz
 import utils_voz as voz # Módulo de voz modular
 import time
 from datetime import datetime
