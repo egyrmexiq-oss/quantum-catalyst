@@ -6,3 +6,4 @@ gTTS
 pandas
 pytesseract
 Pillow
+fpdf
