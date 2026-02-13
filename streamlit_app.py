@@ -233,7 +233,7 @@ with st.sidebar:
     st.caption(f"ID Sesión: {st.session_state.usuario_data['clave']}")
     
 st.markdown("---")
-    st.caption(f"ID Sesión: {st.session_state.usuario_data['clave']}")
+st.caption(f"ID Sesión: {st.session_state.usuario_data['clave']}")
     
     # --- BOTÓN DE DESCARGA PDF ---
     if st.session_state.mensajes:
